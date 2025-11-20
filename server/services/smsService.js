@@ -19,21 +19,24 @@ const smsTemplates = {
     return `⚠️ ParkSys Alert: Parking facility reached ${data.occupancyRate}% capacity. ${data.occupiedSlots} occupied, ${data.availableSlots} available.`;
   }
 };
-
-// Create Twilio client
 const createTwilioClient = () => {
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const fromNumber = process.env.TWILIO_PHONE_NUMBER;
 
+  // FULL VALUES - check these exactly
+  console.log('🔐 FULL CREDENTIALS:', {
+    accountSid: accountSid,
+    authToken: authToken,
+    fromNumber: fromNumber,
+    accountSidLength: accountSid?.length || 0,
+    authTokenLength: authToken?.length || 0
+  });
+
   if (!accountSid || !authToken || !fromNumber) {
-    console.warn('⚠️ Missing Twilio configuration. Set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER');
+    console.warn('⚠️ Missing Twilio configuration');
     return null;
   }
-
-  console.log('📱 Creating Twilio client with:', {
-    accountSid: accountSid.substring(0, 6) + '...'
-  });
 
   const client = twilio(accountSid, authToken);
   return { client, fromNumber };
